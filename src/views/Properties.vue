@@ -38,27 +38,63 @@
         </p>
       </div>
 
-      <div v-for="property of filteredProperties" :key="property.id" class="box">
-        <article class="media">
-          <div class="media-left">
-            <router-link :to="{ path: `/view/${property.id}` }">
-              <img :src="property.image" alt="Image" />
-            </router-link>
-          </div>
-          <div class="media-content">
-            <router-link :to="{ path: `/view/${property.id}` }">
-              <div class="content">
-                <p></p>
-                <h3 class="title">{{ property.name }}</h3>
-                <p>{{ property.description }}</p>
-                <p><strong> Price: </strong> {{ property.price }}€</p>
-                <p><strong> City: </strong> {{ property.city }}</p>
+      <div class="columns is-multiline">
+        <div
+          class="column is-one-third "
+          v-for="property of filteredProperties"
+          :key="property.id"
+        >
+          <div class="card">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <router-link :to="{ path: `/order/${property.id}` }">
+                  <img :src="property.image" alt="Image" />
+                </router-link>
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="media">
+                <div class="media-content">
+                  <router-link :to="{ path: `/order/${property.id}` }">
+                    <div class="content">
+                      <p></p>
+                      <h3 class="title">{{ property.name }}</h3>
+                      <p>{{ property.description }}</p>
+                      <p><strong> Price: </strong> {{ property.price }}€</p>
+                      <p><strong> City: </strong> {{ property.city }}</p>
+                    </div>
+                  </router-link>
+                </div>
               </div>
-            </router-link>
+            </div>
+            <div class="order-button">
+              <a class="button" :href="'/order/' + property.id">Order</a>
+            </div>
           </div>
 
-          <a class="button" :href="'/order/' + property.id">Order</a>
-        </article>
+          <!-- <div class="box">
+            <article class="media">
+              <div class="media-left">
+                <router-link :to="{ path: `/view/${property.id}` }">
+                  <img :src="property.image" alt="Image" />
+                </router-link>
+              </div>
+              <div class="media-content">
+                <router-link :to="{ path: `/view/${property.id}` }">
+                  <div class="content">
+                    <p></p>
+                    <h3 class="title">{{ property.name }}</h3>
+                    <p>{{ property.description }}</p>
+                    <p><strong> Price: </strong> {{ property.price }}€</p>
+                    <p><strong> City: </strong> {{ property.city }}</p>
+                  </div>
+                </router-link>
+              </div>
+
+              <a class="button" :href="'/order/' + property.id">Order</a>
+            </article>
+          </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -119,7 +155,7 @@ export default {
     },
     searchByName() {
       this.filteredProperties = this.properties.filter((property) =>
-        property.name.includes(this.searchPhrase)
+        property.name.toLowerCase().includes(this.searchPhrase.toLowerCase())
       );
     }
   }
@@ -130,44 +166,32 @@ export default {
 img {
   max-width: 100%;
 }
-article {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-a .button {
-  margin-top: 1rem;
-}
 
-.box a {
+.card a {
   color: black;
 }
 
-.box:last-child {
-  margin-bottom: 2rem;
+.card {
+  display: flex;
+  flex-direction: column;
 }
 
-.media-content {
+.order-button {
   text-align: center;
-  margin-bottom: 1rem;
+  margin: 1rem auto;
+}
+
+.card-content {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 @media screen and (min-width: 768px) {
-  .media-content {
-    margin-right: 1rem;
-    text-align: left;
-  }
-  article {
-    flex-direction: row;
-  }
-  .media-left {
-    width: 30%;
-  }
-  .box {
+  .card {
     transition: transform 0.2s;
   }
-  .box:hover {
-    transform: translateX(5px);
+  .card:hover {
+    transform: translateY(4px);
   }
 }
 </style>
