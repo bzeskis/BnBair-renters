@@ -33,9 +33,6 @@
               </div>
               <div v-else class="buttons">
                 <button class="button is-success">
-                  <router-link to="/add">Add New</router-link>
-                </button>
-                <button class="button is-success">
                   <router-link to="/properties">See All</router-link>
                 </button>
                 <button @click="signOut" class="button is-light">

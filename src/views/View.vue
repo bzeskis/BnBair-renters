@@ -40,17 +40,26 @@ export default {
   beforeMount() {
     firebase
       .firestore()
-      .collection("properties")
-      .doc(this.$route.params.id)
+      .collection("users")
       .get()
-      .then((doc) => {
-        this.property.id = doc.id;
-        this.property.name = doc.data().name;
-        this.property.price = doc.data().price;
-        this.property.description = doc.data().description;
-        this.property.image = doc.data().image;
-      })
-      .then(() => console.log(this.property));
+      .then((snapshot) =>
+        snapshot.docs.forEach((doc) => {
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(doc.id)
+            .collection("properties")
+            .doc(this.$route.params.id)
+            .get()
+            .then((doc) => {
+              this.property.id = doc.id;
+              this.property.name = doc.data().name;
+              this.property.price = doc.data().price;
+              this.property.description = doc.data().description;
+              this.property.image = doc.data().images[0];
+            });
+        })
+      );
   }
 };
 </script>

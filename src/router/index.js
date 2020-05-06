@@ -38,6 +38,14 @@ const routes = [
     }
   },
   {
+    path: "/order/:id",
+    name: "Order",
+    component: () => import(/* webpackChunkName: "view" */ "../views/Order.vue"),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: "/",
     redirect: "properties"
   }

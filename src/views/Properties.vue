@@ -4,12 +4,41 @@
       <section class="hero">
         <div class="hero-body">
           <h1 class="title">
-            My Properties
+            See our properties
           </h1>
         </div>
       </section>
 
-      <div v-for="property of properties" :key="property.id" class="box">
+      <form class="field is-grouped" @submit.prevent="searchByName">
+        <p class="control is-expanded">
+          <input
+            v-model="searchPhrase"
+            class="input"
+            type="text"
+            placeholder="Search by name"
+          />
+        </p>
+        <p class="control">
+          <a class="button is-success">
+            Search
+          </a>
+        </p>
+      </form>
+
+      <div class="field">
+        <p class="control">
+          <span class="select">
+            <select v-model="citySelect" @change="filterByCity">
+              <option selected>All</option>
+              <option>Vilnius</option>
+              <option>Kaunas</option>
+              <option>Klaipėda</option>
+            </select>
+          </span>
+        </p>
+      </div>
+
+      <div v-for="property of filteredProperties" :key="property.id" class="box">
         <article class="media">
           <div class="media-left">
             <router-link :to="{ path: `/view/${property.id}` }">
@@ -23,11 +52,12 @@
                 <h3 class="title">{{ property.name }}</h3>
                 <p>{{ property.description }}</p>
                 <p><strong> Price: </strong> {{ property.price }}€</p>
+                <p><strong> City: </strong> {{ property.city }}</p>
               </div>
             </router-link>
           </div>
 
-          <a class="button" :href="'/edit/' + property.id">Edit</a>
+          <a class="button" :href="'/order/' + property.id">Order</a>
         </article>
       </div>
     </div>
@@ -42,29 +72,56 @@ import "firebase/auth";
 export default {
   data() {
     return {
-      properties: []
+      properties: [],
+      filteredProperties: [],
+      searchPhrase: "",
+      citySelect: "All"
     };
   },
   beforeMount() {
-    firebase.auth().onAuthStateChanged(() => {
-      firebase
-        .firestore()
-        .collection("properties")
-        .where("uid", "==", firebase.auth().currentUser.uid)
-        .get()
-        .then((snapshot) => {
-          snapshot.docs.forEach((item) => {
-            this.properties.push({
-              id: item.id,
-              name: item.data().name,
-              city: item.data().city,
-              image: item.data().image,
-              price: item.data().price,
-              description: item.data().description
+    firebase
+      .firestore()
+      .collection("users")
+      .get()
+      .then((snapshot) =>
+        snapshot.docs.forEach((doc) => {
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(doc.id)
+            .collection("properties")
+            .get()
+            .then((snapshot) => {
+              snapshot.docs.forEach((item) => {
+                this.properties.push({
+                  id: item.id,
+                  name: item.data().name,
+                  city: item.data().city,
+                  image: item.data().images[0],
+                  price: item.data().price,
+                  description: item.data().description
+                });
+                this.filteredProperties = this.properties;
+              });
             });
-          });
-        });
-    });
+        })
+      );
+  },
+  methods: {
+    filterByCity() {
+      if (this.citySelect !== "All") {
+        this.filteredProperties = this.properties.filter(
+          (property) => property.city == this.citySelect
+        );
+      } else {
+        this.filteredProperties = this.properties;
+      }
+    },
+    searchByName() {
+      this.filteredProperties = this.properties.filter((property) =>
+        property.name.includes(this.searchPhrase)
+      );
+    }
   }
 };
 </script>
