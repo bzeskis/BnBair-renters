@@ -116,6 +116,7 @@ button a {
   margin: 0;
   width: 100%;
 }
+
 @media screen and (min-width: 768px) {
   .wrapper {
     width: 80%;
