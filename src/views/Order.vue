@@ -67,7 +67,7 @@
             </table>
           </div>
           <div class="media-right">
-            <p>
+            <p class='subtitle'>
               Total price: <span> {{ totalPrice }}€</span>
             </p>
             <button @click="makeOrder" class="button is-dark">
@@ -118,6 +118,7 @@ export default {
       } else {
         this.orderedDates.push(e.target.value);
       }
+      this.totalPrice = this.property.price * this.orderedDates.length;
     },
     makeOrder() {
       this.success = false;
