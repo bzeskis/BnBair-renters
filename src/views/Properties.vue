@@ -71,29 +71,6 @@
               <a class="button" :href="'/order/' + property.id">Order</a>
             </div>
           </div>
-
-          <!-- <div class="box">
-            <article class="media">
-              <div class="media-left">
-                <router-link :to="{ path: `/view/${property.id}` }">
-                  <img :src="property.image" alt="Image" />
-                </router-link>
-              </div>
-              <div class="media-content">
-                <router-link :to="{ path: `/view/${property.id}` }">
-                  <div class="content">
-                    <p></p>
-                    <h3 class="title">{{ property.name }}</h3>
-                    <p>{{ property.description }}</p>
-                    <p><strong> Price: </strong> {{ property.price }}€</p>
-                    <p><strong> City: </strong> {{ property.city }}</p>
-                  </div>
-                </router-link>
-              </div>
-
-              <a class="button" :href="'/order/' + property.id">Order</a>
-            </article>
-          </div> -->
         </div>
       </div>
     </div>
