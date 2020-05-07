@@ -1,5 +1,20 @@
 <template>
   <div class="order">
+    <div class="modals" :class="{ 'is-active': isActive }">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <p class="title has-text-white">
+          Total price: <span> {{ totalPrice }}€</span>
+        </p>
+        <StripeVueCard />
+      </div>
+      <button
+        @click="isActive = false"
+        class="modal-close is-large"
+        aria-label="close"
+      ></button>
+    </div>
+
     <div class="wrapper">
       <div class="box">
         <div class="media top">
@@ -67,7 +82,7 @@
             </table>
           </div>
           <div class="media-right">
-            <p class='subtitle'>
+            <p class="subtitle">
               Total price: <span> {{ totalPrice }}€</span>
             </p>
             <button @click="makeOrder" class="button is-dark">
@@ -85,10 +100,12 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import Notification from "@/components/Notification";
+import StripeVueCard from "@/components/StripeVueCard";
 
 export default {
   components: {
-    Notification
+    Notification,
+    StripeVueCard
   },
   data() {
     return {
@@ -259,5 +276,8 @@ th {
   .media-right {
     padding-top: 0rem;
   }
+}
+div .modal-background {
+  color: white !important;
 }
 </style>
